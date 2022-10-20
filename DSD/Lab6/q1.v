@@ -1,18 +1,24 @@
-module q1(x,y,a,b,s0,s1,f)
-2to1mux stage 0(x,y,s0,xy);
-2to1mux stage 1(a,b,s0,ab);
-2to1mux stage 2(ab,xy,s1,f);
+module q1(w,s,f);
+    input [3:0] w;
+    input [1:0] s;
+    output f;
+    wire [1:0] ft;  
+    MUX2to1 stage0(w[1:0],s[0],ft[0]);
+    MUX2to1 stage1(w[3:2],s[0],ft[1]);
+    MUX2to1 stage2(ft,s[1],f);
+
 endmodule
 
-module 2to1mux(w1,w2,s,f)
-input w1,w2,s;
-output f;
-reg f;
-always @(s)
-begin
-    if(s==1)
-        f=w1;
-    else
-        f=w2;
-end
+module MUX2to1(w,s,f);
+    input [1:0] w;
+    input s;
+    output f;
+    reg f;
+
+    always @(w or s)
+    begin 
+        f = w[1];
+        if(s == 0)
+            f = w[0];
+    end
 endmodule
