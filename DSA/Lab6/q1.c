@@ -1,69 +1,80 @@
-#include<stdio.h>
-#include<ctype.h>
-#include<string.h>
-#include<math.h>
-typedef struct
+#include <stdio.h>
+#include <string.h>
+#define MAX 10
+
+struct stack
 {
-	int arr[50];
-	int top;
-}Stack;
-void push(Stack *s,int x,int n)
+    int top;
+	char stk[MAX];
+}s;
+
+int isEmpty()
 {
-	s->arr[++s->top]=x;
+	if (s.top==-1) return 1;
+	return 0;
 }
-int pop(Stack *s)
+
+int isFull()
 {
-	return(s->arr[s->top--]);
+	if (s.top==MAX-1) return 1;
+	return 0;
 }
-int evaluate(char ch, int op1, int op2)
-{
-    switch(ch)
-    {
-    case '+':
-        return (op1+op2);
-        break;
 
-    case '-':
-        return (op1-op2);
-        break;
-
-    case '*':
-        return (op1*op2);
-        break;
-
-    case '/':
-        return (op1/op2);
-        break;
-
-    case '^':
-        return pow(op1,op2);
-        break;
-    }
+void push()
+{	
+	char x;
+	printf("Enter element to be pushed: ");
+	scanf(" %c", &x);
+	if (isFull()) printf("Stack Overflow\n");
+	else 
+	{
+		s.stk[++s.top] = x;
+	}
 }
-void main()
+
+void pop ()
 {
-	Stack st;
-	char prefix[50];
-	st.top=-1;
-	int i,k=0;
-	printf("Enter numerical prefix expression : ");
-	gets(prefix);
+	if (isEmpty()) printf("Stack Underflow\n");
+	else
+	{
+		char c=s.stk[s.top];
+		s.top--;
+		printf("%c is popped\n", c);
+	}
+}
 
-	int len=strlen(prefix);
-    int op1,op2,result;
+void display()
+{
+	for (int i=0; i<=s.top; i++)
+	{
+		printf("%c ", s.stk[i]);
+	}
+	printf("\n");
+}
 
-    for(i=strlen(prefix)-1;i>=0;i--)
-    {
-        int ch=prefix[i];
-        if(isdigit(ch))
-            push(&st,(ch-48),len);
-        else
-        {
-            op1=pop(&st);
-            op2=pop(&st);
-            result=evaluate(ch,op1,op2);
-            push(&st,result,len);
-        }
-    }
-    printf("Result = %d\n",pop(&st));
+int main()
+{	
+	int op;
+	s.top=-1;
+	do 
+	{ 
+		printf("1:Push 2:Pop 3:Display 4:End \n Enter choice: ");
+		scanf("%d", &op);
+		switch (op)
+		{
+			case 1:
+				push();
+				break;
+			case 2:
+				pop();
+				break;
+			case 3:
+				display();
+				break;
+            		case 4:
+                                exit(0);
+
+		}
+	} while (op!=0);
+	return 0;
 }

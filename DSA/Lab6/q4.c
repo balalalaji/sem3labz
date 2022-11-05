@@ -1,49 +1,53 @@
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
-typedef struct
+#include <stdio.h>
+#define MAX 20
+int stack[MAX];
+int top=-1; 
+int isEmpty()
 {
-	char arr[50][50];
-	int top;
-}Stack;
-void push(Stack *s,char str[])
-{
-	strcpy(s->arr[++s->top],str);
+	if (top==-1) return 1;
+	return 0;
 }
-char* pop(Stack *s)
+void push(int x)
 {
-	return s->arr[s->top--];
+	stack[++top] = x;
 }
-void main()
+void pop()
 {
-	Stack st;
-	st.top=-1;
-
-	char prefix[50],postfix[50];
-	int i;
-	printf("Enter prefix expression : ");
-	gets(prefix);
-	printf("Prefix : %s\n",prefix);
-
-	for(i=strlen(prefix)-1;i>=0;i--)
+	top--;
+}
+void display()
+{
+	for (int i=0; i<=top; i++)
 	{
-		char ch = prefix[i];
-
-		if(ch=='+' || ch=='-' || ch=='*' || ch=='/' || ch=='^')
-        {
-            char *op1 = pop(&st);
-            char *op2 = pop(&st);
-			char postfix[]={ch,'\0'};
-			strcat(postfix,op2);
-			strcat(postfix,op1);
-			push(&st,postfix);
+		printf("%d ", stack[i]);
+}}
+int solve(int arr[MAX], int n, int k)
+{	
+	push(arr[0]);
+	int count=0;
+	for (int i=1; i<n; i++) 
+	{
+        while (!isEmpty() && stack[top] < arr[i] && count < k) 
+        {                                    
+            pop();
+            count++;
         }
-		else
-        {
-            char postfix[]={ch,'\0'};
-            push(&st,postfix);
-		}
+        push(arr[i]);
 	}
-	char *temp = pop(&st);
-	printf("Postfix expression : %s",strrev(temp));
+	display();
 }
+int main()
+{
+	int a[MAX], n, k;
+	printf("Enter length of array : ");
+	scanf("%d", &n);
+	printf("Enter k elements to be deleted : ");
+	scanf("%d", &k);
+    printf("Enter array elements : ");
+	for (int i=0; i<n; i++)
+	{
+		scanf("%d", &a[i]);
+	}
+	solve(a, n, k);
+}
+
