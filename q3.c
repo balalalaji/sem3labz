@@ -1,5 +1,4 @@
 #include<stdio.h>
-int* address(int*);
 int* address(int* a){
     return a;  
 }
